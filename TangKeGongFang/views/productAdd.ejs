@@ -56,22 +56,25 @@
     <div class="panel panel-default">
             <div class="panel-heading">标题</div>
             <div class="panel-body">
-                中文<input type="text"  class="form-control" name="titleZh" placeholder="输入标题">
+                <input type="text"  class="form-control translate" name="titleZh" placeholder="输入标题">
                 <br>
-                英文<input type="text"  class="form-control" name="titleEn" placeholder="输入标题">
+
             </div>
 
-            <div class="panel-heading">分类</div>
+            <div class="panel-heading">分类(下拉选择)</div>
             <div class="panel-body">
-                <input type="text"  class="form-control" name="classify" placeholder="例子：棒棒糖=bbt">
+                <select class="form-control" name="classify" >
+                    <% for(let i = 0; i<list.length;i++){ %>
+                        <option value="<%= list[i].type %>"><%= list[i].name %></option>
+                    <% } %>
+                </select>
                 <br>
             </div>
 
             <div class="panel-heading">简要说明</div>
             <div class="panel-body">
-                中文<input type="text"  class="form-control" name="sketchZh" placeholder="简述">
+                中文<input type="text"  class="form-control translate" name="sketchZh" placeholder="简述">
                 <br>
-                英文<input type="text"  class="form-control" name="sketchEn" placeholder="简述">
             </div>
 
             <div class="panel-heading">库存</div>
@@ -79,7 +82,7 @@
                 <input type="text"  class="form-control" name="stockZh" placeholder="库存">
             </div>
 
-            <div class="panel-heading">商品图片</div>
+            <div class="panel-heading">商品主图</div>
             <div class="panel-body">
                 <input type="file" name="pic"  class="" style="display: none" id="upload-title-pic" >
                 <label class="title-pic" for="upload-title-pic">上传图片</label>
@@ -90,11 +93,6 @@
             <div class="panel-heading">价格</div>
             <div class="panel-body">
                 <input type="text" name="price"  class="form-control" placeholder="输入价格">
-            </div>
-
-            <div class="panel-heading">编码</div>
-            <div class="panel-body">
-                <input type="text" name="code"  class="form-control" placeholder="输入编码">
             </div>
 
 
@@ -143,6 +141,7 @@
 </div>
 
 <script src="/y_mask/y_mask.js"></script>
+<script src="/js/md5.js"></script>
 <script>
     let ymask = new yMask('#pic','#mask');
     function changeStyle(control_btn){
@@ -158,6 +157,44 @@
 
     //上传content 图片
     $(document).ready(function () {
+        $('.translate').blur(function(e) {
+            let name;
+            if($(this).attr('name') === 'titleZh'){
+                name = 'titleEn'
+            }else if($(this).attr('name') === 'sketchZh'){
+                name = 'sketchEn'
+            }
+            let str = $(this).val()
+            let salt = (new Date).getTime();
+            let appid = '20190327000281815'
+            let key = 'qTcM3cMgl0cVPqzalDN0'
+            let str1 = appid + str + salt + key
+            let sign = MD5(str1)
+            let data = {
+                q:str,
+                from:"zh",
+                to:"en",
+                appid:appid,
+                salt:salt,
+                sign:sign
+            }
+            $.ajax({
+                    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
+                    type: "post",
+                    data:data,
+                    dataType: 'jsonp',
+                    success: function (data) {
+                        let a =data.trans_result[0].dst
+                        let sss = '英文<input type="text" value="'+
+                                a +
+                                '"  class="form-control" name="' +
+                                name +
+                                '" placeholder="简述">'
+                        $(e.target).next().after(sss)
+                    }
+            });
+        })
+
         $('#q').click(function () {
             let file = document.getElementById('mask-pic');
             let formData = new FormData();

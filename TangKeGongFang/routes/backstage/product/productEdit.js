@@ -12,10 +12,13 @@ router.get('/',function (req,res,next){
     _id = id;
     DB.backStageFind('tkProduct',{'_id':new ObjectId(_id)},function (error,doc){
         let list= doc;
-        console.log(list);
-        res.render('productEdit',{
-            title:"产品修改",
-            list
+        DB.backStageFind('productClass',{},function(error,result) {
+            let arr = [...result]
+            res.render('productEdit',{
+                title:"产品修改",
+                list,
+                arr
+            })
         })
     });
 

@@ -1,31 +1,24 @@
 let express = require('express');
 let router = express.Router();
 let multiparty = require('multiparty');
-// let multer = require('multer');
 let DB = require('../../../model/db');
-
-// //multer
-// let storage = multer.diskStorage({
-//     destination:function (req,file,cb) {
-//
-//     },
-//     filename:function (req,file,cb) {
-//
-//     },
-// });
-
-
-
 
 
 //上传图片s数组
 let content_pic = [];
 
 router.get('/',function (req,res,next) {
-    res.render('productAdd', {
-        title: "商品增加",
-    })
+    DB.backStageFind('productClass',{},function (error,doc){
+        // console.log(doc)
+        let arr = [...doc]
+        res.render('productAdd',{
+            title:"商品增加",
+            list:arr
+        });
+    });
+
 });
+
 
 
 router.post('/',function (req,res,next) {
@@ -39,8 +32,8 @@ router.post('/',function (req,res,next) {
         }
         //打印上传的信息
         // console.log('/');
-        console.log(fields);
-        console.log(files);
+        // console.log(fields);
+        // console.log(files);
         let title_zh= fields.titleZh[0];
         let title_en= fields.titleEn[0];
         let classify = fields.classify[0];
@@ -49,7 +42,8 @@ router.post('/',function (req,res,next) {
         let sketch_en= fields.sketchEn[0];
         let stock_zh = fields.stockZh[0];
         let price = fields.price[0];
-        let code = fields.code[0];
+        let code = ""+(new Date().getTime());
+        code = code.substr(-8)
         let title_pic = files.pic[0].path;
 
         DB.backStageInsert('tkProduct',{

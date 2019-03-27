@@ -63,7 +63,11 @@
 
         <div class="panel-heading">分类</div>
         <div class="panel-body">
-            <input type="text" value="<%= list[0].classify%>"  class="form-control" name="classify" placeholder="例子：棒棒糖=bbt">
+            <select class="form-control" name="classify" >
+                <% for(let i = 0; i<arr.length;i++){ %>
+                    <option value="<%= arr[i].type %>"><%= arr[i].name %></option>
+                <% } %>
+            </select>
             <br>
         </div>
 

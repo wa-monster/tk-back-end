@@ -15,6 +15,7 @@ router.get('/',function (req,res){
 
 });
 
+
 //页面设置，首页轮播图
 router.use('/Slider',require('./Slider'));
 router.use('/pageProduct',require('./pageProduct'));

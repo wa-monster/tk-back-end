@@ -1,12 +1,40 @@
 <%- include header/nav.ejs %>
 
 <style>
-    li{
+    .imgboxs{
         list-style-type: none;
+        float: left;
+        margin: 10px;
     }
     #addbtn{
         display: block;
         margin: 40px;
+
+    }
+    .imgbox{
+        width: 500px;
+        position: relative;
+    }
+    .delbtn{
+        position: absolute;
+        /*width: 38px;*/
+        /*height: 38px;*/
+        /*margin: 2px;*/
+        right: 2px;
+        top: 0;
+        display: none;
+        font-size: 40px;
+        line-height: 38px;
+        border-radius:50%;
+        background-color: #e5e5e5;
+        cursor: pointer;
+        text-align: center;
+    }
+    .delbtn:hover{
+        background-color: silver;
+    }
+    .imgbox:hover .delbtn{
+        display: block;
     }
 </style>
 
@@ -16,11 +44,14 @@
         <li class="active">首页轮播图</li>
     </ol>
     <button id="addbtn">添加图片</button>
-    <ul>
+    <ul class="ul-imgboxs">
         <% for(let i =0; i<list.img.length;i++){ %>
-        <li>
-            <img src="<%= list.img[i] %>" width="500" alt="">
-            <input id="id" type="hidden" value="<%= list._id %>">
+        <li class="imgboxs">
+            <div class="imgbox">
+                <img  src="<%= list.img[i] %>"  width="500" alt="">
+                <div class="delbtn iconfont icon-shanchu" data-index="<%= i %>"></div>
+            </div>
+            <input id="id" type="hidden"  value="<%= list._id %>">
         </li>
         <% } %>
     </ul>
@@ -44,12 +75,33 @@
 <script src="/y_mask/y_mask.js"></script>
 <link rel="stylesheet" href="/y_mask/y_mask.css">
 <script>
-    new yMask('#addbtn','#mask',)
-
+    let ymask = new yMask('#addbtn','#mask')
     //上传content 图片
+    function delBtnClick(_this,id){
+
+    }
     $(document).ready(function () {
         let id = $('#id').val()
-        console.log(id);
+        $('.ul-imgboxs').on('click','.delbtn',function() {
+            let data = { imgIndex:$(this).data('index') }
+            $.ajax(({
+                url:'pageSetting/Slider/delpic?_id='+id,
+                type:'POST',
+                data:JSON.stringify(data),
+                async:true,
+                cache:false,
+                contentType:"application/json",
+                processData:false,
+                success:function(data) {
+                    if(data.code === 200){
+                        let s = data.s
+                        $('.imgboxs').eq(s.imgIndex).remove()
+                    }else{
+                        alert("成功  code不为200")
+                    }
+                }
+            }))
+        })
         $('#q').click(function () {
             let file = document.getElementById('mask-pic');
             let formData = new FormData();
@@ -65,7 +117,16 @@
                 success:function (data) {
                     if(data.code === 200){
                         console.log('成功');
-                        window.history.go(0);
+                        let len = $('.imgboxs').length
+                        let str = '<li class="imgboxs">'+
+                            '<div class="imgbox">'+
+                            '<img  src="'+data.img+'"  width="500" alt="">'+
+                            '<div class="delbtn iconfont icon-shanchu3" data-index="' + (len) +'"></div>'+
+                            '</div>'+
+                            '<input id="id" type="hidden"  value="'+id+'">'+
+                            '</li>'
+                        $('.ul-imgboxs').append(str)
+                        ymask.clickEl2()
                     }else{
                         alert('上传失败')
                     }

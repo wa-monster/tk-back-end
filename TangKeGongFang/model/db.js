@@ -48,7 +48,7 @@ exports.backStageInsert = function (collectionsname,json,callback){
 exports.backStageDelete = function(collectionsname,json,callback){
     __connectDB(function (db){
         let backStageManage = db.db('backStage');
-        backStageManage.collection('tkProduct').remove(json,function (error,result) {
+        backStageManage.collection(collectionsname).deleteOne(json,function (error,result) {
             if(error){
                 console.log(error);
                 console.log('删除数据出错');

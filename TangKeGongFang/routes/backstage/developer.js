@@ -35,6 +35,8 @@ router.use('/productDetail',require('./product/productDetail'));
 
 router.use('/productEdit',require('./product/productEdit'));
 
+router.use('/productClass',require('./product/productClass'));
+
 router.use('/login',require('./product/login'));
 
 

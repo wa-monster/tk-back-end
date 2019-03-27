@@ -109,7 +109,7 @@ new yMask('点击出现的元素','要出现的元素'，{'一些配置'})
         clickEl1:function () {
             this.el1.click();
         },
-
+        //没写对
     };
 
 

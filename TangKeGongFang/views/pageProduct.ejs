@@ -1,12 +1,39 @@
 <%- include header/nav.ejs %>
 
 <style>
-    li{
+    .imgboxs{
         list-style-type: none;
+        float: left;
+        margin: 10px;
     }
     #addbtn{
         display: block;
         margin: 40px;
+
+    }
+    .imgbox{
+        width: 500px;
+        position: relative;
+    }
+    .delbtn{
+        position: absolute;
+        /*width: 40px;*/
+        /*height: 40px;*/
+        right: 2px;
+        top: 0;
+        display: none;
+        font-size: 40px;
+        line-height: 40px;
+        border-radius:50%;
+        background-color: #e5e5e5;
+        cursor: pointer;
+
+    }
+    .delbtn:hover{
+        background-color: silver;
+    }
+    .imgbox:hover .delbtn{
+        display: block;
     }
 </style>
 
@@ -18,11 +45,13 @@
 
     <button id="addbtn">添加图片</button>
     <% if(list){%>
-        <ul>
+        <ul class="ul-imgboxs">
             <% for(let i =0; i<list.length;i++){ %>
-                <% console.log(list[i].path)%>
-                <li>
-                    <img src="<%= list[i].path %>" width="500" alt="">
+                <li class="imgboxs">
+                    <div class="imgbox">
+                        <img  src="<%= list[i].path %>"  width="500" alt="">
+                        <div class="delbtn iconfont icon-shanchu" data-value="<%= list[i]._id %>" data-index="<%= i %>"></div>
+                    </div>
                 </li>
             <% } %>
         </ul>
@@ -55,11 +84,30 @@
 <script src="/y_mask/y_mask.js"></script>
 <link rel="stylesheet" href="/y_mask/y_mask.css">
 <script>
-    new yMask('#addbtn','#mask',)
+    let ymask = new yMask('#addbtn','#mask',)
 
     //上传content 图片
         $(document).ready(function () {
-
+            $('.ul-imgboxs').on('click','.delbtn',function(e) {
+                let data = {_id: $(e.target).data('value')}
+                $.ajax(({
+                    url:'pageProduct/pic',
+                    type:'DELETE',
+                    data:JSON.stringify(data),
+                    async:true,
+                    cache:false,
+                    contentType:"application/json",
+                    processData:false,
+                    success:function(data) {
+                        if(data.code === 200){
+                            // let s = data.s
+                            $(e.target).parentsUntil('.imgboxs').remove()
+                        }else{
+                            alert("成功  code不为200")
+                        }
+                    }
+                }))
+            })
             $('#q').click(function () {
                 let file = document.getElementById('mask-pic');
                 let formData = new FormData();
@@ -89,8 +137,16 @@
                                 success:function (data){
                                     if(data.code === 200){
                                         console.log('type成功');
-                                        console.log(data);
-                                        window.history.go(0);
+                                        let len = $('.imgboxs').length
+                                        let str = '<li class="imgboxs">'+
+                                            '<div class="imgbox">'+
+                                            '<img  src="'+data.ops[0].path+'"  width="500" alt="">'+
+                                            '<div class="delbtn iconfont icon-shanchu3"' +
+                                            'data-value="'+data.ops[0]._id +'" data-index="' + (len) +'"></div>'+
+                                            '</div>'+
+                                            '</li>'
+                                        $('.ul-imgboxs').append(str)
+                                        ymask.clickEl2()
                                     }else{
                                         alert('上传失败')
                                     }

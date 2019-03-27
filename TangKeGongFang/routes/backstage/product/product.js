@@ -7,7 +7,6 @@ let ObjectId  = DB.ObjectId;
 router.get('/',function (req,res,next) {
     DB.backStageFind('tkProduct',{},function (error,doc){
         // console.log(doc);
-        console.log(1);
         res.render('product',{
             title:"商品列表",
             list:doc
