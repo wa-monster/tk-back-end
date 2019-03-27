@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"  content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <!--<script src="/js/jquery-3.2.1.js"></script>-->
+    <script src="/js/jq2.2.1.js"></script>
+    <script src="/js/bootstrap.js"></script>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+            <span class="sr-only">展开导航</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">糖客工坊</a>
+    </div>
+    <div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav">
+            <li><a href="/developer/product">商品信息</a></li>
+            <li><a href="/developer/productOrder">订单</a></li>
+            <li><a href="/developer/pageSetting">页面设置</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a>欢迎您,<%= userInfo.user%></a>
+            </li>
+            <li><a href="/developer/login/quit">安全退出</a>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+
+<% if(navActive ===1){%>
+    <%- include sideNav1.ejs %>
+<%}else if(navActive ===2){%>
+    <%- include sideNav2.ejs %>
+<% }else if(navActive ===3){%>
+    <%- include sideNav3.ejs %>
+<% }else{%>
+    <div>后台返回数据有误</div>
+<% }%>
+
+<script>
+
+</script>

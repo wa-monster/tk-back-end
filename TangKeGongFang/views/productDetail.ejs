@@ -1,0 +1,156 @@
+<%- include header/nav.ejs %>
+
+    <style>
+        #productTitle{
+            margin-bottom: 20px;
+            text-indent: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 40px;
+            color: #666;
+        }
+        #productPrice{
+            color: #666;
+            padding: 10px;
+            background-color: #f5f5f5;
+            outline: none;
+
+        }
+        #content{
+            margin-top: 10px;
+
+        }
+        #productD{
+            /*margin: 10px 0;*/
+        }
+        #productMenu{
+            margin: 10px 0;
+        }
+        #productIntroduce{
+            border: 1px solid #e5e5e5;
+            border-top: none;
+            padding: 20px;
+        }
+        .productIntroduceContent{
+            /*margin-top: 20px;*/
+        }
+    </style>
+
+    <div class="col-sm-10" id="content">
+        <ol class="breadcrumb">
+            <li class="active">商品管理</li>
+            <li class="active">商品详情</li>
+        </ol>
+
+
+        <div class="col-sm-12" id="productD">
+            <div class="col-sm-5">
+                <div class="panel panel-primary " style="border: 1px solid #e5e5e5" >
+                    <div class="panel-body" >
+                        <img src="<%= list[0].title_pic %>" width="200" height="200" class="col-sm-11" alt="">
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-7" id="productD-7">
+                <div class="col-sm-12" id="productTitle">
+                    <div  >
+                        <div  style="font-weight: bold; font-size: 24px">
+                            <%= list[0].title_zh%> %>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-12" >
+                    <div  id="productPrice" >
+                        <div>
+                           价格：<span style="color: red;">￥<span style="font-size: 25px"><%= list[0].price %></span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12" id="productMenu">
+            <ul class="nav nav-tabs nav-justified"  id="productUl">
+                <li role="presentation" class="active"><a  href="#">产品介绍</a></li>
+                <li role="presentation"><a href="#">评价</a></li>
+            </ul>
+            <div id='productIntroduce' >
+                <div class="productIntroduceContent">
+                    <% for(let i = 0; i<list[0].content_pic.length;i++){ %>
+                        <img src="<%= list[0].content_pic[i] %>" alt="图片">
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function (e){
+            $('#productUl a').click(function (e) {
+                e.preventDefault()
+                $(this).tab('show')
+
+                if($(this).text() === '产品介绍'){
+                    $.ajax({
+                        type:"GET",
+                        url:"productDetail/productItro?_id=<%= list[0]._id %>",
+                        success:function (data){
+                                if(data.code === 200 ){
+                                    let html = '';
+                                    console.log(data.list+"产品介绍");
+                                    for(let i =0 ;i < data.list.length; i++){
+                                        html += "<img src='" + data.list[i] + "'></div>";
+                                    }
+
+                                    $('.productIntroduceContent').html(html)
+                                }else{
+                                    alert('状态码不是200');
+                                }
+                        },
+                        error:function (error){
+                            console.log('连接错误');
+                            console.log(error);
+                        }
+                    })
+                }else{
+                    $.ajax({
+                        type:"GET",
+                        url:"productDetail/evaluate",
+                        success:function(data){
+                            if(data.code === 200){
+                                let html = '';
+                                console.log(data.list);
+                                for(let i =0 ;i < data.list.length; i++){
+                                    html += "<div class='col-sm-12' style='border: 1px solid #000'>" +
+                                                "<div class='col-sm-3'>" +
+                                                    data.list[i] +
+                                                "</div>" +
+                                                "<div class='col-sm-9'>" +
+                                                    data.list[i] +
+                                                "</div>" +
+                                            "</div>";
+                                }
+
+                                $('.productIntroduceContent').html( html );
+                                // $('.productIntroduceContent').html('asdasda')
+                            }else{
+                                alert('状态码不是200');
+                            }
+                        },
+                        error:function (error){
+                            console.log('连接错误');
+                            console.log(error);
+                        }
+
+                    })
+                }
+
+            })
+        })
+    </script>
+</body>
+</html>

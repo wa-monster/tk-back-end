@@ -1,0 +1,66 @@
+#mask-content{
+    /*opacity: 1;*/
+    width: 600px;
+    height: 500px;
+    background-color: white;
+    border: 1px solid #e5e5e5;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+}
+.mask-upload{
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 40px;
+    background-color: #e44;
+    text-align: center;
+    line-height: 40px;
+    color: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    top: 30%;
+    left: 40%;
+}
+.mask-upload:hover{
+    background-color: #d22;
+}
+.mask-picpng{
+    width: 150px;
+    height: 100px;
+    /*background: url("a.png") no-repeat;*/
+    /*background-size:100% 100%;*/
+    position: absolute;
+    top: 40%;
+    left: 35%;
+
+}
+#q{
+    width: 100px;
+    height: 40px;
+    background: red;
+    display: none;
+    position: absolute;
+    left: 40%;
+    bottom: 20%;
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    border-radius: 5px;
+}
+#mask-pic{
+    display: none;
+}
+
+#addbtn{
+    background: red;
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 30px;
+    border-radius:5px ;
+    color: white;
+    font-size:17px ;
+}

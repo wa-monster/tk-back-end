@@ -1,0 +1,201 @@
+<%- include header/nav.ejs %>
+<link rel="stylesheet" href="//at.alicdn.com/t/font_861634_a6hszxef3i7.css">
+
+<style>
+    /*.wrapper{*/
+        /*margin: 100px auto;*/
+        /*width: 800px;*/
+        /*border: 1px solid #e5e5e5;*/
+    /*}*/
+    .control-area{
+        background-color: #ddd;
+        height: 50px;
+        color: #999;
+    }
+    .control-area a{
+        color: #999;
+        display: inline-block;
+        margin: 10px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        text-decoration: none;
+        line-height: 30px;
+    }
+    .control-area a:hover{
+        background-color: #ccc;
+    }
+    .text-area{
+        border: 1px solid #e5e5e5;
+        outline: none;
+        min-height: 450px;
+        margin-bottom: 20px;
+    }
+    .title-pic{
+        width: 80px;
+        height: 40px;
+        display: block;
+        background: #e33;
+        color: white;
+        text-align: center;
+        line-height: 40px;
+    }
+    .title-pic:hover{
+        background: #d22;
+    }
+</style>
+
+<div class="col-sm-10">
+    <ol class="breadcrumb">
+        <li class="active">商品管理
+        </li>
+        <li class="active">增加商品
+        </li>
+    </ol>
+    <form action="productAdd" method="post" enctype="multipart/form-data">
+    <div class="panel panel-default">
+            <div class="panel-heading">标题</div>
+            <div class="panel-body">
+                中文<input type="text"  class="form-control" name="titleZh" placeholder="输入标题">
+                <br>
+                英文<input type="text"  class="form-control" name="titleEn" placeholder="输入标题">
+            </div>
+
+            <div class="panel-heading">分类</div>
+            <div class="panel-body">
+                <input type="text"  class="form-control" name="classify" placeholder="例子：棒棒糖=bbt">
+                <br>
+            </div>
+
+            <div class="panel-heading">简要说明</div>
+            <div class="panel-body">
+                中文<input type="text"  class="form-control" name="sketchZh" placeholder="简述">
+                <br>
+                英文<input type="text"  class="form-control" name="sketchEn" placeholder="简述">
+            </div>
+
+            <div class="panel-heading">库存</div>
+            <div class="panel-body">
+                <input type="text"  class="form-control" name="stockZh" placeholder="库存">
+            </div>
+
+            <div class="panel-heading">商品图片</div>
+            <div class="panel-body">
+                <input type="file" name="pic"  class="" style="display: none" id="upload-title-pic" >
+                <label class="title-pic" for="upload-title-pic">上传图片</label>
+                <br>
+                <img class="title-pic-img" src="" width="300" alt="">
+            </div>
+
+            <div class="panel-heading">价格</div>
+            <div class="panel-body">
+                <input type="text" name="price"  class="form-control" placeholder="输入价格">
+            </div>
+
+            <div class="panel-heading">编码</div>
+            <div class="panel-body">
+                <input type="text" name="code"  class="form-control" placeholder="输入编码">
+            </div>
+
+
+        <div class="panel-heading">内容</div>
+            <div class="panel-body">
+                <div class="control-area">
+                    <a class="control-btn" href="javascript:void 0" data-index="0" data-command="FontSize" data-value="3" onclick="changeStyle(this)">
+                        <span class="iconfont icon-ai247"></span>
+                    </a>
+                    <a class="control-btn" href="javascript:void 0" data-index="0" data-command="FontSize" data-value="4" onclick="changeStyle(this)">
+                        <span class="iconfont icon-zitidaxiaoim"></span>
+                    </a>
+                    <a class="control-btn" href="javascript:void 0" data-index="0" data-command="FontSize" data-value="6" onclick="changeStyle(this)">
+                        <span class="iconfont icon-biaotizhengwenqiehuan"></span>
+                    </a>
+                    |
+                    <a class="control-btn" href="javascript:void 0" data-index="0" data-command="Bold" onclick="changeStyle(this)">
+                        <span class="iconfont icon-cuti"></span>
+                    </a>
+                    <a class="control-btn" href="javascript:void 0" data-index="0" data-command="Italic" onclick="changeStyle(this)">
+                        <span class="iconfont icon-xieti1"></span>
+                    </a>
+                    |
+                    <a id="pic" class="control-btn" href="javascript:void 0" >
+                        <span class="iconfont icon-charutupian"></span>
+                    </a>
+                </div>
+                <div class="text-area" name="content" contenteditable="true"></div>
+                <button id="tijiao" type="submit" class="btn btn-lg btn-danger col-sm-offset-10">提交</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div id="mask">
+    <div id="mask-content">
+        <label for="mask-pic" class="mask-upload">
+            上传图片
+        </label>
+        <input type="file" name="pic" id="mask-pic">
+        <img class="mask-picpng" src="/img/a.png" width="150" alt="上传图片">
+
+        <button id="q">确定</button>
+
+    </div>
+</div>
+
+<script src="/y_mask/y_mask.js"></script>
+<script>
+    let ymask = new yMask('#pic','#mask');
+    function changeStyle(control_btn){
+        control_btn.dataset.value?document.execCommand(control_btn.dataset.command,false,control_btn.dataset.value):document.execCommand(control_btn.dataset.command,false,null);
+        if(control_btn.dataset.index === "0"){
+            control_btn.dataset.index="1";
+            control_btn.style.backgroundColor = '#555';
+        }else{
+            control_btn.dataset.index="0";
+            control_btn.style.backgroundColor = '#ddd';
+        }
+    }
+
+    //上传content 图片
+    $(document).ready(function () {
+        $('#q').click(function () {
+            let file = document.getElementById('mask-pic');
+            let formData = new FormData();
+            formData.append('file',file.files[0]);
+            $.ajax({
+                url:'productAdd/addpic',
+                type:'POST',
+                data:formData,
+                async:true,
+                cache:false,
+                contentType:false,
+                processData:false,
+                success:function (data) {
+                    if(data.code === 200){
+                        let html = '<img src="'+ data.filePath +'" >'
+                        $('.text-area').append(html)
+                        $('#mask').click();
+                    }else{
+                        alert('上传失败')
+                    }
+
+                },
+                error:function (err){
+                    console.log('err',err);
+                }
+            })
+        })
+    })
+
+    document.getElementById('mask-pic').onchange=function () {
+        document.getElementById('q').style.display = 'block';
+        document.getElementsByClassName('mask-picpng')[0].setAttribute('src',window.URL.createObjectURL(this.files[0]))
+    }
+
+    document.getElementById('upload-title-pic').onchange=function () {
+        document.getElementsByClassName('title-pic-img')[0].setAttribute('src',window.URL.createObjectURL(this.files[0]));
+    }
+</script>
+<link rel="stylesheet" href="/y_mask/y_mask.css">
+</body>
+</html>

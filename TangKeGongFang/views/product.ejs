@@ -1,0 +1,60 @@
+<%- include header/nav.ejs %>
+
+
+
+
+
+<div class="col-sm-10">
+    <ol class="breadcrumb">
+        <li class="active">商品管理</li>
+        <li class="active">商品列表</li>
+    </ol>
+
+    <div class="table-responsive">
+        <table class="table table-striped ">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>图标</th>
+                <th>名称</th>
+                <th>价格</th>
+
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <% for(let i = 0; i<list.length;i++){ %>
+            <tr class="productDetails">
+                <td hidden><%= list[i]._id %></td>
+                <td><%= i+1%></td>
+                <td><img src=" <%= list[i].title_pic %> " width="50" height="40" alt=""></td>
+                <td><%= list[i].title_zh%></td>
+                <td><%= list[i].price%></td>
+
+                <td class="text-center">
+                    <a class="btn btn-success" href="productEdit?_id=<%= list[i]._id %>">修改</a>
+                    <a class="btn btn-danger" href="product/delete?_id=<%= list[i]._id %>">删除</a>
+                </td>
+            </tr>
+            <% }%>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script>
+        $(document).ready(function (){
+            if($('.productDetails')){
+                $('.productDetails').click(function (){
+
+                    let id = $(this).find('td').eq(0).html();
+                    // console.log(id)
+                    window.location.href='/developer/productDetail?_id='+id;
+                })
+            }
+        })
+    </script>
+
+</body>
+</html>
